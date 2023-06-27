@@ -1,0 +1,13 @@
+.results[]| [ 
+  .to.primaryAccession, 
+  .to.uniProtkbId,
+  ([ .to.proteinDescription.recommendedName.fullName.value, 
+     .to.proteinDescription.alternativeNames?[0].fullName.value,
+     .to.proteinDescription.submissionNames?[0].fullName.value
+   ] | join(",")),
+  ([ .to.genes[]? |.geneName.value]|join(",")),
+  .to.organism.scientificName, 
+  (.to.organism.lineage|join(",")), 
+  ([ .to.uniProtKBCrossReferences[]? | select( .database == "GO")| .id ]|join(",")),
+  ([ .to.uniProtKBCrossReferences[]? | select( .database == "GO") | .properties[0].value]| join(","))
+  ]|@tsv
